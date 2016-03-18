@@ -16,6 +16,10 @@
     "minimum_minutes": 30
 },
 {
+    "atoc_code": "GC",
+    "minimum_minutes": 60
+},
+{
     "atoc_code": "GW",
     "minimum_minutes": 30
 },
