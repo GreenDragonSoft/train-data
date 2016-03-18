@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+
+# curl 'https://datafeeds.networkrail.co.uk/ntrod/j_spring_security_check'  \
+#     -H 'Origin: https://datafeeds.networkrail.co.uk'  \
+#     -H 'Accept-Encoding: gzip, deflate'  \
+#     -H 'Accept-Language: en-GB,en-US;q=0.8,en;q=0.6'  \
+#     -H 'Upgrade-Insecure-Requests: 1'  \
+#     -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'  \
+#     -H 'Content-Type: application/x-www-form-urlencoded'  \
+#     -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'  \
+#     -H 'Cache-Control: max-age=0'  \
+#     -H 'Referer: https://datafeeds.networkrail.co.uk/ntrod/spring_security_login'  \
+#     -H 'Connection: keep-alive'  \
+#     -H 'DNT: 1' \
+#     --data 'j_username=test&j_password=test&submit=Login' --compressed
+
+import contextlib
+import filecmp
+import os
+import tempfile
+import shutil
+
+from pprint import pprint
+
+import requests
+
+
+DATA_URL = (
+    'https://datafeeds.networkrail.co.uk/'
+    'ntrod/SupportingFileAuthenticate?type=CORPUS'
+)
+
+OUTPUT_FILENAME = os.path.join(
+    os.path.dirname(__file__),
+    'CORPUSExtract.json.gz')
+
+
+def main():
+    session = get_authenticated_session()
+
+    with make_temp_file() as temp_filename:
+        print(temp_filename)
+        download_file(session, DATA_URL, temp_filename)
+
+        if files_differ(temp_filename, OUTPUT_FILENAME):
+            print('Updating {}'.format(OUTPUT_FILENAME))
+            shutil.rename(temp_filename, OUTPUT_FILENAME)
+
+        else:
+            print('{} unchanged, nothing to do.'.format(OUTPUT_FILENAME))
+
+
+@contextlib.contextmanager
+def make_temp_file(*args, **kwargs):
+    handle, temp_filename = tempfile.mkstemp(*args, **kwargs)
+    os.close(handle)
+
+    yield temp_filename
+
+    if os.path.isfile(temp_filename):
+        os.unlink(temp_filename)
+
+
+def files_differ(a, b):
+    identical = filecmp.cmp(a, b)
+    return not identical
+
+
+def get_authenticated_session():
+    session = requests.Session()
+
+    headers = {
+        'Origin': 'https://datafeeds.networkrail.co.uk',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Referer': 'https://datafeeds.networkrail.co.uk/ntrod/spring_security_login',
+        # 'Accept-Encoding': 'gzip, deflate',
+        # 'Accept-Language': 'en-GB,en-US;q=0.8,en;q=0.6',
+        # 'Cache-Control': 'max-age=0',
+        # 'Upgrade-Insecure-Requests': '1',
+        # 'Connection': 'keep-alive',
+        # 'DNT': '1',
+    }
+
+    username = os.environ['NR_DATAFEEDS_USERNAME']
+    password = os.environ['NR_DATAFEEDS_PASSWORD']
+
+    payload = {
+        'j_username': username,
+        'j_password': password,
+        'submit': 'Login'
+    }
+
+    response = session.post(
+        'https://datafeeds.networkrail.co.uk/ntrod/j_spring_security_check',
+        headers=headers,
+        data=payload
+    )
+    response.raise_for_status()
+    return session
+
+
+def download_file(session, url, file_path):
+    response = session.get(url, stream=True)
+    response.raise_for_status()
+    print('Got HTTP {}'.format(response.status_code))
+    pprint(dict(response.headers))
+
+    with open(file_path, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=1024):
+            if chunk:  # filter out keep-alive new chunks
+                f.write(chunk)
+
+
+if __name__ == '__main__':
+    main()
