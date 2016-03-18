@@ -1,0 +1,10 @@
+#!/bin/sh -eux
+
+THIS_DIR=$(dirname $0)
+
+ZIP_FILE=NaPTANcsv.zip
+
+test -f ${ZIP_FILE} && rm ${ZIP_FILE}
+wget --continue http://www.dft.gov.uk/NaPTAN/snapshot/NaPTANcsv.zip
+unzip -o NaPTANcsv.zip RailReferences.csv  # -o means overwrite
+test -f ${ZIP_FILE} && rm ${ZIP_FILE}

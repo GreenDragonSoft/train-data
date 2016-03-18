@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+import csv
+import json
+import sys
+
+
+def main():
+    output_list = []
+
+    for row in csv.DictReader(sys.stdin):
+        output_list.append(row)
+    json.dump(output_list, sys.stdout, indent=4)
+
+
+if __name__ == '__main__':
+    main()
