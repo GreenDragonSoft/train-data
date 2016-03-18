@@ -1,0 +1,102 @@
+[
+{
+    "atoc_code": "AW",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "CC",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "CH",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "EM",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "GW",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "GR",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "HC",
+    "minimum_minutes": 15
+},
+{
+    "atoc_code": "HX",
+    "minimum_minutes": 15
+},
+{
+    "atoc_code": "HT",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "LE",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "LM",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "LO",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "LT",
+    "minimum_minutes": null
+},
+{
+    "atoc_code": "ME",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "NT",
+    "minimum_minutes": 60
+},
+{
+    "atoc_code": "SE",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "SW",
+    "minimum_minutes": 60
+},
+{
+    "atoc_code": "SR",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "TL",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "TP",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "TW",
+    "minimum_minutes": 15
+},
+{
+    "atoc_code": "VT",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "XC",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "XR",
+    "minimum_minutes": 30
+},
+{
+    "atoc_code": "ZZ",
+    "minimum_minutes": null
+}
+]
