@@ -12,6 +12,10 @@
     "minimum_minutes": 30
 },
 {
+    "atoc_code": "ES",
+    "minimum_minutes": 60
+},
+{
     "atoc_code": "EM",
     "minimum_minutes": 30
 },
